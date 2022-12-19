@@ -1,0 +1,50 @@
+{
+	"name": "@as/data",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc --build --watch"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"aws-sdk": "2.1258.0",
+		"axios": "1.1.3",
+		"mongoose": "6.7.2",
+		"sharp": "0.31.2",
+		"@as/types": "workspace:*"
+	},
+	"devDependencies": {
+		"@tsconfig/node18": "1.0.1",
+		"@types/node": "18.11.9",
+		"typescript": "4.8.4"
+	},
+	"imports": {
+		"#internal/*": {
+			"default": "./dist/*.js",
+			"types": "./dist/*.d.ts"
+		}
+	},
+	"exports": {
+		".": {
+			"default": "./dist/index.js",
+			"types": "./dist/*.d.ts"
+		},
+		"./item-data": {
+			"default": "./dist/item-data.js",
+			"types": "./dist/item-data.d.ts"
+		},
+		"./localization-data": {
+			"default": "./dist/localization-data.js",
+			"types": "./dist/localization-data.d.ts"
+		},
+		"./adp-version-data": {
+			"default": "./dist/adp-version-data.js",
+			"types": "./dist/adp-version-data.d.ts"
+		}
+	},
+	"type": "module"
+}
