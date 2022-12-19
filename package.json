@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"prettier": "prettier --write \"**/*.{js,ts,css,scss,html,jsx,tsx,json,yaml}\"",
-		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+"
+		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+",
+		"clean-ts": "find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+"
 	},
 	"repository": {
 		"type": "git",
