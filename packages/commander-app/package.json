@@ -11,6 +11,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@as/services": "workspace:*",
+		"@as/types": "workspace:*",
 		"commander": "9.4.1",
 		"winston": "3.8.2"
 	},

@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
-import { Item, ItemDocument } from "@as/types";
-import { ResultPage } from "@as/types";
+import axios from "axios";
+import { Item, ItemDocument, ResultPage } from "@as/types";
+import { localizationSchema } from "#internal/localization-data";
 
 const itemSchema = new Schema<ItemDocument>({
 	uniqueName: {
@@ -19,21 +20,6 @@ const itemSchema = new Schema<ItemDocument>({
 		type: Number,
 		required: true,
 	},
-	enchantment: {
-		type: Number,
-		required: true,
-	},
-	quality: {
-		type: Number,
-		required: true,
-	},
-	assetUrl: {
-		type: String,
-	},
-	version: {
-		type: String,
-		required: true,
-	},
 	enchantments: {
 		type: [Number],
 		required: true,
@@ -42,41 +28,15 @@ const itemSchema = new Schema<ItemDocument>({
 		type: Number,
 		required: true,
 	},
-	en: {
+	version: {
 		type: String,
 		required: true,
 	},
-	de: {
+	assetUrl: {
 		type: String,
-		required: true,
 	},
-	fr: {
-		type: String,
-		required: true,
-	},
-	ru: {
-		type: String,
-		required: true,
-	},
-	pl: {
-		type: String,
-		required: true,
-	},
-	es: {
-		type: String,
-		required: true,
-	},
-	pt: {
-		type: String,
-		required: true,
-	},
-	zh: {
-		type: String,
-		required: true,
-	},
-	ko: {
-		type: String,
-		required: true,
+	localizationDocument: {
+		type: localizationSchema,
 	},
 });
 
@@ -85,12 +45,25 @@ export const ItemModel = model<ItemDocument>("Item", itemSchema);
 export const upsertItem = async (item: Item): Promise<void> => {
 	const filter = {
 		uniqueName: item.uniqueName,
-		tier: item.tier,
-		enchantment: item.enchantment,
-		quality: item.quality,
 	};
 
 	await ItemModel.findOneAndUpdate(filter, item, { upsert: true }).exec();
+};
+
+export const upsertItems = async (items: Item[]): Promise<void> => {
+	await ItemModel.bulkWrite(
+		items.map((item: Item) => {
+			return {
+				updateOne: {
+					filter: {
+						uniqueName: item.uniqueName,
+					},
+					update: item,
+					upsert: true,
+				},
+			};
+		})
+	);
 };
 
 export const findOneItem = async (
@@ -169,4 +142,13 @@ export const deleteItemGhosts = async (
 	currentVersion: Item["version"]
 ): Promise<void> => {
 	await ItemModel.deleteMany({ version: { $ne: currentVersion } });
+};
+
+export const fetchAdpItems = async (): Promise<any> => {
+	return (
+		await axios.get(
+			"https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/items.json",
+			{ responseType: "json" }
+		)
+	).data;
 };

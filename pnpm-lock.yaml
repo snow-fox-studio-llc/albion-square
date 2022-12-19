@@ -18,7 +18,7 @@ importers:
       '@types/node': 18.11.9
       commander: 9.4.1
       typescript: 4.8.4
-      winston: ^3.8.2
+      winston: 3.8.2
     dependencies:
       '@as/services': link:../services
       '@as/types': link:../types

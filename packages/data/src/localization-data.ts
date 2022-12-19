@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { Localization, LocalizationDocument } from "@as/types";
 import { Item } from "@as/types";
 
-const localizationSchema = new Schema<LocalizationDocument>({
+export const localizationSchema = new Schema<LocalizationDocument>({
 	namespace: {
 		type: String,
 		required: true,
@@ -110,7 +110,7 @@ export const findLocalizationByShopSubCategoryId = async (
 };
 
 export const findLocalizationByItemQuality = async (
-	quality: Item["quality"]
+	quality: number
 ): Promise<LocalizationDocument | null> => {
 	return await LocalizationModel.findOne({
 		key: `@ITEMDETAILS_STATS_QUALITY_${quality}`,
