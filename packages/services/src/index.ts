@@ -8,6 +8,6 @@ export const closeServices = async () => {
     await closeData();
 }
 
-export * from "#internal/adp-version-service";
+export * from "#internal/game-version-service";
 export * from "#internal/item-service";
 export * from "#internal/localization-service";

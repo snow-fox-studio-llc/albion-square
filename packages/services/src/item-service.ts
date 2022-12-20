@@ -1,8 +1,8 @@
-import { fetchAdpItems, upsertItems, fetchRemoteAdpVersion } from "@as/data";
+import { fetchItems, upsertItems } from "@as/data";
 import { Item } from "@as/types";
 
 const arrayOrObjHelperUtil = async (
-	i: Array<any> | Object,
+	i: any,
 	cb: (item: any) => Promise<any>
 ) => {
 	if (Array.isArray(i)) {
@@ -15,40 +15,40 @@ const arrayOrObjHelperUtil = async (
 };
 
 export const populateItemsFromMetadata = async (
-	info: (message: string) => void
+	version: string,
+	onSuccess: (message: string) => void,
+	onError: (message: string) => void,
 ): Promise<void> => {
-	const version = await fetchRemoteAdpVersion();
+	const rawItemsJson = await fetchItems();
 
-	const json = await fetchAdpItems();
-
-	const jsonKeys = Object.keys(json.items);
+	const rawItemsJsonKeys = Object.keys(rawItemsJson.items);
 
 	const items: Item[] = [];
 
-	for (let i = 3; i < jsonKeys.length; ++i) {
-		let jsonValue = json.items[jsonKeys[i]];
+	for (let i = 3; i < rawItemsJsonKeys.length; ++i) {
+		let rawItemsJsonValue = rawItemsJson.items[rawItemsJsonKeys[i]];
 
-		await arrayOrObjHelperUtil(jsonValue, async (adpItem: any) => {
-			const uniqueName = adpItem["@uniquename"];
-			const shopCategory = adpItem["@shopcategory"];
-			const shopSubCategory = adpItem["@shopsubcategory1"];
-			const tier = Number(adpItem["@tier"]);
-			const maxQuality = Number(adpItem["@maxqualitylevel"] || "1");
+		await arrayOrObjHelperUtil(rawItemsJsonValue, async (rawItem: any) => {
+			const uniqueName = rawItem["@uniquename"];
+			const shopCategory = rawItem["@shopcategory"];
+			const shopSubCategory = rawItem["@shopsubcategory1"];
+			const tier = Number(rawItem["@tier"]);
+			const maxQuality = Number(rawItem["@maxqualitylevel"] || "1");
 
 			const localization = "TODO";
 
 			const enchantments = [];
 
-			if ("enchantments" in adpItem) {
+			if ("enchantments" in rawItem) {
 				enchantments.push(0);
 				await arrayOrObjHelperUtil(
-					adpItem.enchantments.enchantment,
+					rawItem.enchantments.enchantment,
 					async (enchantment) => {
 						enchantments.push(Number(enchantment["@enchantmentlevel"]));
 					}
 				);
-			} else if ("@enchantmentlevel" in adpItem) {
-				enchantments.push(Number(adpItem["@enchantmentlevel"]));
+			} else if ("@enchantmentlevel" in rawItem) {
+				enchantments.push(Number(rawItem["@enchantmentlevel"]));
 			} else {
 				enchantments.push(0);
 			}
@@ -65,7 +65,7 @@ export const populateItemsFromMetadata = async (
 
 			items.push(item);
 
-			info(JSON.stringify(item).substring(0, 60) + "...");
+			onSuccess(JSON.stringify(item));
 		});
 	}
 

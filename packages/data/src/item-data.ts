@@ -144,7 +144,7 @@ export const deleteItemGhosts = async (
 	await ItemModel.deleteMany({ version: { $ne: currentVersion } });
 };
 
-export const fetchAdpItems = async (): Promise<any> => {
+export const fetchItems = async (): Promise<any> => {
 	return (
 		await axios.get(
 			"https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/items.json",
