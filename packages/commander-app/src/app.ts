@@ -1,6 +1,10 @@
 import { Command } from "commander";
 import winston from "winston";
-import { getAdpVersionStatus, populateItemsFromMetadata } from "@as/services";
+import {
+	getAdpVersionStatus,
+	populateItemsFromMetadata,
+	updateLocalization,
+} from "@as/services";
 
 export const run = async () => {
 	const program = new Command();
@@ -24,12 +28,16 @@ export const run = async () => {
 			const adpVersionStatus = await getAdpVersionStatus();
 
 			winston.info(JSON.stringify(adpVersionStatus));
-			
-			if(adpVersionStatus.upToDate) {
+
+			if (adpVersionStatus.upToDate) {
 				return;
 			}
 
-			await populateItemsFromMetadata(winston.info);
+			await updateLocalization(
+				adpVersionStatus.latestAdpVersion,
+				winston.info,
+				winston.error
+			);
 		});
 
 	await program.parseAsync(process.argv);

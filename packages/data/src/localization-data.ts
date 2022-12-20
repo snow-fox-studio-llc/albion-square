@@ -1,10 +1,12 @@
 import { Schema, model } from "mongoose";
+import axios from "axios";
 import { Localization, LocalizationDocument } from "@as/types";
 import { Item } from "@as/types";
 
 export const localizationSchema = new Schema<LocalizationDocument>({
 	namespace: {
 		type: String,
+		enum: ["albionOnline", "albionSquare"],
 		required: true,
 	},
 	version: {
@@ -15,50 +17,22 @@ export const localizationSchema = new Schema<LocalizationDocument>({
 		type: String,
 		required: true,
 	},
-	en: {
+	"de-DE": String,
+	"en-US": {
 		type: String,
 		required: true,
 	},
-	de: {
-		type: String,
-		required: true,
-	},
-	fr: {
-		type: String,
-		required: true,
-	},
-	ru: {
-		type: String,
-		required: true,
-	},
-	pl: {
-		type: String,
-		required: true,
-	},
-	es: {
-		type: String,
-		required: true,
-	},
-	pt: {
-		type: String,
-		required: true,
-	},
-	it: {
-		type: String,
-		required: true,
-	},
-	zh: {
-		type: String,
-		required: true,
-	},
-	ko: {
-		type: String,
-		required: true,
-	},
-	ja: {
-		type: String,
-		required: true,
-	},
+	"es-ES": String,
+	"fr-FR": String,
+	"id-ID": String,
+	"it-IT": String,
+	"ja-JP": String,
+	"ko-KR": String,
+	"pl-PL": String,
+	"pt-BR": String,
+	"ru-RU": String,
+	"zh-CN": String,
+	"zh-TW": String,
 });
 
 export const LocalizationModel = model<LocalizationDocument>(
@@ -77,6 +51,25 @@ export const upsertLocalization = async (
 	await LocalizationModel.findOneAndUpdate(filter, localization, {
 		upsert: true,
 	}).exec();
+};
+
+export const upsertLocalizationList = async (
+	localizationList: Localization[]
+): Promise<void> => {
+	await LocalizationModel.bulkWrite(
+		localizationList.map((localization: Localization) => {
+			return {
+				updateOne: {
+					filter: {
+						namespace: localization.namespace,
+						key: localization.key,
+					},
+					update: localization,
+					upsert: true,
+				},
+			};
+		})
+	);
 };
 
 export const findLocalizationByItemUniqueName = async (
@@ -133,4 +126,13 @@ export const deleteLocalizationGhosts = async (
 	currentVersion: Item["version"]
 ): Promise<void> => {
 	await LocalizationModel.deleteMany({ version: { $ne: currentVersion } });
+};
+
+export const fetchLocalization = async (commit: string): Promise<any> => {
+	return (
+		await axios.get(
+			`https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/${commit}/localization.json`,
+			{ responseType: "json" }
+		)
+	).data;
 };
