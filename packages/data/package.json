@@ -41,9 +41,9 @@
 			"default": "./dist/localization-data.js",
 			"types": "./dist/localization-data.d.ts"
 		},
-		"./adp-version-data": {
-			"default": "./dist/adp-version-data.js",
-			"types": "./dist/adp-version-data.d.ts"
+		"./game-version-data": {
+			"default": "./dist/game-version-data.js",
+			"types": "./dist/game-version-data.d.ts"
 		}
 	},
 	"type": "module"

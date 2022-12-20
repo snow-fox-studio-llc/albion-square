@@ -60,7 +60,7 @@ export const updateLocalization = async (
 
 		localizationList.push(localization);
 
-		onSuccess(localization.key);
+		onSuccess(JSON.stringify(localization));
 	}
 
 	onSuccess("Updating localization");

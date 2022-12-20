@@ -1,9 +1,9 @@
 import { Command } from "commander";
 import winston from "winston";
 import {
-	getAdpVersionStatus,
-	populateItemsFromMetadata,
+	getGameVersionStatus,
 	updateLocalization,
+	populateItemsFromMetadata,
 } from "@as/services";
 
 export const run = async () => {
@@ -12,29 +12,29 @@ export const run = async () => {
 	program.version("1.0");
 
 	program
-		.command("get-adp-version-status")
+		.command("get-game-version-status")
 		.description(
-			"Compares local and remote https://github.com/broderickhyman/ao-bin-dumps commit sha"
+			"Compares local and remote game versions"
 		)
 		.action(async () => {
-			const adpVersionStatus = await getAdpVersionStatus();
-			winston.info(JSON.stringify(adpVersionStatus));
+			const gameVersionStatus = await getGameVersionStatus();
+			winston.info(JSON.stringify(gameVersionStatus));
 		});
 
 	program
-		.command("adp-github-action")
-		.description("Runs all ADP metadata scripts")
+		.command("game-version-update-gh-action")
+		.description("Compares local and remote game versions. Runs all update services if necessary")
 		.action(async () => {
-			const adpVersionStatus = await getAdpVersionStatus();
+			const gameVersionStatus = await getGameVersionStatus();
 
-			winston.info(JSON.stringify(adpVersionStatus));
+			winston.info(JSON.stringify(gameVersionStatus));
 
-			if (adpVersionStatus.upToDate) {
+			if (gameVersionStatus.upToDate) {
 				return;
 			}
 
 			await updateLocalization(
-				adpVersionStatus.latestAdpVersion,
+				gameVersionStatus.latestVersion,
 				winston.info,
 				winston.error
 			);
