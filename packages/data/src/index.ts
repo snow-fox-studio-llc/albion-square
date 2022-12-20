@@ -12,3 +12,4 @@ export const closeData = async () => {
 
 export * from "#internal/item-data";
 export * from "#internal/localization-data";
+export * from "#internal/adp-version-data";

@@ -1,7 +1,10 @@
 import { Command } from "commander";
 import winston from "winston";
-
-import { getAdpVersionStatus } from "@as/services";
+import {
+	getAdpVersionStatus,
+	populateItemsFromMetadata,
+	updateLocalization,
+} from "@as/services";
 
 export const run = async () => {
 	const program = new Command();
@@ -15,15 +18,26 @@ export const run = async () => {
 		)
 		.action(async () => {
 			const adpVersionStatus = await getAdpVersionStatus();
-			winston.info(adpVersionStatus.latestAdpVersion);
+			winston.info(JSON.stringify(adpVersionStatus));
 		});
 
 	program
-		.command("run-adp-scripts")
+		.command("adp-github-action")
 		.description("Runs all ADP metadata scripts")
 		.action(async () => {
 			const adpVersionStatus = await getAdpVersionStatus();
-			console.log(adpVersionStatus);
+
+			winston.info(JSON.stringify(adpVersionStatus));
+
+			if (adpVersionStatus.upToDate) {
+				return;
+			}
+
+			await updateLocalization(
+				adpVersionStatus.latestAdpVersion,
+				winston.info,
+				winston.error
+			);
 		});
 
 	await program.parseAsync(process.argv);

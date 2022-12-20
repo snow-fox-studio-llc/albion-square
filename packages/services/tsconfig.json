@@ -9,5 +9,5 @@
 		"rootDir": "./src/",
 		"outDir": "./dist/"
 	},
-	"references": [{ "path": "../data/" }, { "path": "../types/" }]
+	"references": [{ "path": "../data/" }]
 }
