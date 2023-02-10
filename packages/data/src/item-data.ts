@@ -1,12 +1,13 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Error } from "mongoose";
 import axios from "axios";
-import { Item, ItemDocument, ResultPage } from "@as/types";
+import { Item, ItemDocument, DistinctItem, ResultPage } from "@as/types";
 import { localizationSchema } from "#internal/localization-data";
 
 const itemSchema = new Schema<ItemDocument>({
 	uniqueName: {
 		type: String,
 		required: true,
+		unique: true,
 	},
 	shopCategory: {
 		type: String,
@@ -32,11 +33,10 @@ const itemSchema = new Schema<ItemDocument>({
 		type: String,
 		required: true,
 	},
-	assetUrl: {
-		type: String,
-	},
+	assetUrl: String,
 	localizationDocument: {
 		type: localizationSchema,
+		required: true,
 	},
 });
 
@@ -47,18 +47,18 @@ export const upsertItem = async (item: Item): Promise<void> => {
 		uniqueName: item.uniqueName,
 	};
 
-	await ItemModel.findOneAndUpdate(filter, item, { upsert: true }).exec();
+	await ItemModel.replaceOne(filter, item, { upsert: true }).lean().exec();
 };
 
 export const upsertItems = async (items: Item[]): Promise<void> => {
 	await ItemModel.bulkWrite(
 		items.map((item: Item) => {
 			return {
-				updateOne: {
+				replaceOne: {
 					filter: {
 						uniqueName: item.uniqueName,
 					},
-					update: item,
+					replacement: item,
 					upsert: true,
 				},
 			};
@@ -66,16 +66,44 @@ export const upsertItems = async (items: Item[]): Promise<void> => {
 	);
 };
 
+export const validateItem = async (item: Item): Promise<void> => {
+	await ItemModel.validate(item);
+};
+
+const convertDistinctItemToItemFilter = (distinctItem: DistinctItem) => {
+	return Object.fromEntries(
+		Object.entries(distinctItem).map(([key, value]) => {
+			switch (key) {
+				case "enchantment":
+					return ["enchantments", { $all: [value] }];
+				case "quality":
+					return ["maxQuality", { $gte: value }];
+				default:
+					return [key, value];
+			}
+		})
+	);
+};
+
 export const findOneItem = async (
-	filter: Item
+	distinctItem: DistinctItem
 ): Promise<ItemDocument | null> => {
+	const filter = convertDistinctItemToItemFilter(distinctItem);
+
 	return await ItemModel.findOne(filter).lean().exec();
 };
 
-export const findItems = async (filter: Item): Promise<ItemDocument[]> => {
+export const findItems = async (
+	distinctItem: DistinctItem
+): Promise<ItemDocument[]> => {
+	const filter = convertDistinctItemToItemFilter(distinctItem);
+
 	return await ItemModel.find(filter).lean().exec();
 };
 
+/**
+ * @deprecated The method should not be used
+ */
 export const findItemsAtPage = async (
 	filter: Item,
 	limit: number,
@@ -98,8 +126,10 @@ export const findAllItems = async (): Promise<ItemDocument[]> => {
 export const searchItems = async (
 	query: string,
 	lang: string,
-	filter: Item
+	distinctItem: DistinctItem
 ): Promise<ItemDocument[]> => {
+	const filter = convertDistinctItemToItemFilter(distinctItem);
+
 	return ItemModel.aggregate()
 		.search({
 			index: "default",
@@ -113,6 +143,9 @@ export const searchItems = async (
 		.exec();
 };
 
+/**
+ * @deprecated The method should not be used
+ */
 export const searchItemsAtPage = async (
 	query: string,
 	lang: string,
@@ -144,10 +177,10 @@ export const deleteItemGhosts = async (
 	await ItemModel.deleteMany({ version: { $ne: currentVersion } });
 };
 
-export const fetchItems = async (): Promise<any> => {
+export const fetchItems = async (commit: string): Promise<any> => {
 	return (
 		await axios.get(
-			"https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/master/items.json",
+			`https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/${commit}/items.json`,
 			{ responseType: "json" }
 		)
 	).data;

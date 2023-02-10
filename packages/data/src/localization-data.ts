@@ -1,16 +1,20 @@
 import { Schema, model } from "mongoose";
 import axios from "axios";
-import { Localization, LocalizationDocument } from "@as/types";
-import { Item } from "@as/types";
+import {
+	Item,
+	DistinctItem,
+	Localization,
+	LocalizationDocument,
+	LocalizationNamespace,
+} from "@as/types";
 
 export const localizationSchema = new Schema<LocalizationDocument>({
 	namespace: {
 		type: String,
-		enum: ["albionOnline", "albionSquare"],
-		required: true,
-	},
-	version: {
-		type: String,
+		enum: [
+			LocalizationNamespace.ALBION_ONLINE,
+			LocalizationNamespace.ALBION_SQUARE,
+		],
 		required: true,
 	},
 	key: {
@@ -33,7 +37,13 @@ export const localizationSchema = new Schema<LocalizationDocument>({
 	"ru-RU": String,
 	"zh-CN": String,
 	"zh-TW": String,
+	version: {
+		type: String,
+		required: true,
+	},
 });
+
+localizationSchema.index({ namespace: 1, key: 1 }, { unique: true });
 
 export const LocalizationModel = model<LocalizationDocument>(
 	"Localization",
@@ -48,9 +58,11 @@ export const upsertLocalization = async (
 		key: localization.key,
 	};
 
-	await LocalizationModel.findOneAndUpdate(filter, localization, {
+	await LocalizationModel.replaceOne(filter, localization, {
 		upsert: true,
-	}).exec();
+	})
+		.lean()
+		.exec();
 };
 
 export const upsertLocalizationList = async (
@@ -59,12 +71,12 @@ export const upsertLocalizationList = async (
 	await LocalizationModel.bulkWrite(
 		localizationList.map((localization: Localization) => {
 			return {
-				updateOne: {
+				replaceOne: {
 					filter: {
 						namespace: localization.namespace,
 						key: localization.key,
 					},
-					update: localization,
+					replacement: localization,
 					upsert: true,
 				},
 			};
@@ -72,11 +84,35 @@ export const upsertLocalizationList = async (
 	);
 };
 
+export const validateLocalization = async (localization: Localization): Promise<void> => {
+	await LocalizationModel.validate(localization);
+}
+
+export const findLocalizationList = async (
+	filter: Pick<Localization, "namespace" | "key">[]
+): Promise<LocalizationDocument[]> => {
+	return await LocalizationModel.find({ $or: filter }).lean().exec();
+};
+
 export const findLocalizationByItemUniqueName = async (
 	uniqueName: Item["uniqueName"]
 ): Promise<LocalizationDocument | null> => {
 	return await LocalizationModel.findOne({
+		namespace: LocalizationNamespace.ALBION_ONLINE,
 		key: `@ITEMS_${uniqueName}`,
+	})
+		.lean()
+		.exec();
+};
+
+export const findLocalizationListByItemUniqueName = async (
+	uniqueNames: Item["uniqueName"][]
+): Promise<Localization[]> => {
+	return await LocalizationModel.find({
+		namespace: LocalizationNamespace.ALBION_ONLINE,
+		key: {
+			$in: uniqueNames.map((uniqueName) => `@ITEMS_${uniqueName}`),
+		},
 	})
 		.lean()
 		.exec();
@@ -103,7 +139,7 @@ export const findLocalizationByShopSubCategoryId = async (
 };
 
 export const findLocalizationByItemQuality = async (
-	quality: number
+	quality: DistinctItem["quality"]
 ): Promise<LocalizationDocument | null> => {
 	return await LocalizationModel.findOne({
 		key: `@ITEMDETAILS_STATS_QUALITY_${quality}`,
@@ -112,9 +148,9 @@ export const findLocalizationByItemQuality = async (
 		.exec();
 };
 
-export const findAllMarketplaceRolloutLocalization = async (
-	id: string
-): Promise<LocalizationDocument[]> => {
+export const findAllMarketplaceRolloutLocalization = async (): Promise<
+	LocalizationDocument[]
+> => {
 	return await LocalizationModel.find({
 		key: { $regex: /@MARKETPLACEGUI_ROLLOUT_DEFAULT/gm },
 	})
@@ -123,7 +159,7 @@ export const findAllMarketplaceRolloutLocalization = async (
 };
 
 export const deleteLocalizationGhosts = async (
-	currentVersion: Item["version"]
+	currentVersion: Localization["version"]
 ): Promise<void> => {
 	await LocalizationModel.deleteMany({ version: { $ne: currentVersion } });
 };

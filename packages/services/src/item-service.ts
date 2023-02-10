@@ -1,75 +1,121 @@
-import { fetchItems, upsertItems } from "@as/data";
-import { Item } from "@as/types";
+import {
+	fetchItems,
+	validateItem,
+	upsertItems,
+	findLocalizationList,
+	deleteItemGhosts,
+} from "@as/data";
+import { Item, LocalizationDocument, LocalizationNamespace } from "@as/types";
 
-const arrayOrObjHelperUtil = async (
-	i: any,
-	cb: (item: any) => Promise<any>
-) => {
-	if (Array.isArray(i)) {
-		for (const k of i) {
-			await cb(k);
+const extractRawObjects = async (
+	rawJson: any,
+	key: string,
+	rawObjects: any[] = []
+): Promise<any[]> => {
+	if (Array.isArray(rawJson)) {
+		for (const item of rawJson) {
+			await extractRawObjects(item, key, rawObjects);
 		}
-	} else {
-		await cb(i);
+	} else if (typeof rawJson === "object") {
+		if (Object.keys(rawJson).includes(key)) {
+			rawObjects.push(rawJson);
+		} else {
+			for (const item of Object.values(rawJson)) {
+				await extractRawObjects(item, key, rawObjects);
+			}
+		}
 	}
+
+	return rawObjects;
 };
 
-export const populateItemsFromMetadata = async (
+export const updateItems = async (
 	version: string,
 	onSuccess: (message: string) => void,
-	onError: (message: string) => void,
+	onError: (message: string) => void
 ): Promise<void> => {
-	const rawItemsJson = await fetchItems();
+	const rawItemsJson = await fetchItems(version);
 
-	const rawItemsJsonKeys = Object.keys(rawItemsJson.items);
+	const rawItems = await extractRawObjects(rawItemsJson, "@uniquename");
+
+	const localizationList = await findLocalizationList(
+		rawItems.map((rawItem) => {
+			return {
+				namespace: LocalizationNamespace.ALBION_ONLINE,
+				key: `@ITEMS_${rawItem["@uniquename"]}`,
+			};
+		})
+	);
+
+	const localizationMap = new Map(
+		localizationList.map((localizationDocument) => [
+			localizationDocument.key.substring(7, localizationDocument.key.length),
+			localizationDocument,
+		])
+	);
 
 	const items: Item[] = [];
 
-	for (let i = 3; i < rawItemsJsonKeys.length; ++i) {
-		let rawItemsJsonValue = rawItemsJson.items[rawItemsJsonKeys[i]];
+	for (const rawItem of rawItems) {
+		const uniqueName = rawItem["@uniquename"];
+		const shopCategory = rawItem["@shopcategory"];
+		const shopSubCategory = rawItem["@shopsubcategory1"];
+		const tier = Number(rawItem["@tier"]);
+		const maxQuality = Number(rawItem["@maxqualitylevel"] || "1");
+		const localizationDocument = localizationMap.get(uniqueName) as LocalizationDocument;
 
-		await arrayOrObjHelperUtil(rawItemsJsonValue, async (rawItem: any) => {
-			const uniqueName = rawItem["@uniquename"];
-			const shopCategory = rawItem["@shopcategory"];
-			const shopSubCategory = rawItem["@shopsubcategory1"];
-			const tier = Number(rawItem["@tier"]);
-			const maxQuality = Number(rawItem["@maxqualitylevel"] || "1");
+		const enchantments = [];
 
-			const localization = "TODO";
+		if ("enchantments" in rawItem) {
+			enchantments.push(0);
 
-			const enchantments = [];
+			const rawEnchantments = await extractRawObjects(
+				rawItem.enchantments.enchantment,
+				"@enchantmentlevel"
+			);
 
-			if ("enchantments" in rawItem) {
-				enchantments.push(0);
-				await arrayOrObjHelperUtil(
-					rawItem.enchantments.enchantment,
-					async (enchantment) => {
-						enchantments.push(Number(enchantment["@enchantmentlevel"]));
-					}
-				);
-			} else if ("@enchantmentlevel" in rawItem) {
-				enchantments.push(Number(rawItem["@enchantmentlevel"]));
-			} else {
-				enchantments.push(0);
+			for (const rawEnchantment of rawEnchantments) {
+				enchantments.push(rawEnchantment["@enchantmentlevel"]);
 			}
+		} else if ("@enchantmentlevel" in rawItem) {
+			enchantments.push(Number(rawItem["@enchantmentlevel"]));
+		} else {
+			enchantments.push(0);
+		}
 
-			const item = {
-				uniqueName,
-				shopCategory,
-				shopSubCategory,
-				tier,
-				enchantments,
-				maxQuality,
-				version,
-			};
+		const assetUrl = null;
 
-			items.push(item);
+		const item: Item = {
+			uniqueName,
+			shopCategory,
+			shopSubCategory,
+			tier,
+			enchantments,
+			maxQuality,
+			version,
+			assetUrl,
+			localizationDocument,
+		};
 
-			onSuccess(JSON.stringify(item));
-		});
+		try {
+			await validateItem(item)
+		} catch(err) {
+			onError(`${uniqueName} invalid`);
+			continue;
+		}
+
+		items.push(item);
+
+		onSuccess(`${uniqueName} done`);
 	}
 
-	// await upsertItems(items);
+	onSuccess("Updating items");
+
+	await upsertItems(items);
+
+	await deleteItemGhosts(version);
+
+	onSuccess("Done");
 };
 
 export * from "@as/data/item-data";
