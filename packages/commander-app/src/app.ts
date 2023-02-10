@@ -3,7 +3,7 @@ import winston from "winston";
 import {
 	getGameVersionStatus,
 	updateLocalization,
-	populateItemsFromMetadata,
+	updateItems,
 } from "@as/services";
 
 export const run = async () => {
@@ -13,9 +13,7 @@ export const run = async () => {
 
 	program
 		.command("get-game-version-status")
-		.description(
-			"Compares local and remote game versions"
-		)
+		.description("Compares local and remote game versions")
 		.action(async () => {
 			const gameVersionStatus = await getGameVersionStatus();
 			winston.info(JSON.stringify(gameVersionStatus));
@@ -23,7 +21,9 @@ export const run = async () => {
 
 	program
 		.command("game-version-update-gh-action")
-		.description("Compares local and remote game versions. Runs all update services if necessary")
+		.description(
+			"Compares local and remote game versions. Runs all update services if necessary"
+		)
 		.action(async () => {
 			const gameVersionStatus = await getGameVersionStatus();
 
@@ -34,6 +34,12 @@ export const run = async () => {
 			}
 
 			await updateLocalization(
+				gameVersionStatus.latestVersion,
+				winston.info,
+				winston.error
+			);
+
+			await updateItems(
 				gameVersionStatus.latestVersion,
 				winston.info,
 				winston.error

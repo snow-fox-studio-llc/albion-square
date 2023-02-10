@@ -1,9 +1,8 @@
 export interface Localization {
-	namespace?: string;
-	version?: string;
-	key?: string;
+	namespace: string;
+	key: string;
 	"de-DE"?: string;
-	"en-US"?: string;
+	"en-US": string;
 	"es-ES"?: string;
 	"fr-FR"?: string;
 	"id-ID"?: string;
@@ -15,8 +14,14 @@ export interface Localization {
 	"ru-RU"?: string;
 	"zh-CN"?: string;
 	"zh-TW"?: string;
+	version: string;
 }
 
 export interface LocalizationDocument extends Localization {
 	_id: string;
+}
+
+export enum LocalizationNamespace {
+	ALBION_ONLINE = "albionOnline",
+	ALBION_SQUARE = "albionSquare",
 }

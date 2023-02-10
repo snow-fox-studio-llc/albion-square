@@ -1,4 +1,9 @@
-import { fetchLocalization, upsertLocalizationList } from "@as/data";
+import {
+	deleteLocalizationGhosts,
+	fetchLocalization,
+	upsertLocalizationList,
+	validateLocalization,
+} from "@as/data";
 import { Localization } from "@as/types";
 
 const LANG_CODE_DICTIONARY: any = Object.freeze({
@@ -32,7 +37,7 @@ export const updateLocalization = async (
 			continue;
 		}
 
-		const localization: any = {
+		const localization = {
 			namespace: "albionOnline",
 			version: version,
 			key: rawLocalization["@tuid"],
@@ -51,21 +56,25 @@ export const updateLocalization = async (
 							],
 					  ]
 			),
-		};
+		} as Localization;
 
-		if (!localization["en-US"]) {
-			onError(JSON.stringify(rawLocalization));
+		try {
+			await validateLocalization(localization);
+		} catch (err) {
+			onError(`${localization.key} invalid`);
 			continue;
 		}
 
 		localizationList.push(localization);
 
-		onSuccess(JSON.stringify(localization));
+		onSuccess(`${localization.key} done`);
 	}
 
 	onSuccess("Updating localization");
 
 	await upsertLocalizationList(localizationList);
+
+	await deleteLocalizationGhosts(version);
 
 	onSuccess("Done");
 };
