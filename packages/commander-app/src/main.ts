@@ -1,5 +1,5 @@
 import winston, { transports, format } from "winston";
-import { initServices, closeServices } from "@as/services";
+import { initServices, closeServices } from "@as/core";
 import * as app from "#internal/app";
 
 const initCommanderApp = async () => {

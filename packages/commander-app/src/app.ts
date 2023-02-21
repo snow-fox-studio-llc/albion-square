@@ -4,7 +4,7 @@ import {
 	getGameVersionStatus,
 	updateLocalization,
 	updateItems,
-} from "@as/services";
+} from "@as/core";
 
 export const run = async () => {
 	const program = new Command();
