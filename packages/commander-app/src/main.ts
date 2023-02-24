@@ -8,7 +8,6 @@ const initCommanderApp = async () => {
 	winston.configure({
 		transports: [
 			new transports.Console({
-				
 				format: format.combine(
 					format.colorize(),
 					format.label({ label: "commander-app" }),

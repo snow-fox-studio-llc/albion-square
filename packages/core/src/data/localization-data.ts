@@ -84,9 +84,11 @@ export const upsertLocalizationList = async (
 	);
 };
 
-export const validateLocalization = async (localization: Localization): Promise<void> => {
+export const validateLocalization = async (
+	localization: Localization
+): Promise<void> => {
 	await LocalizationModel.validate(localization);
-}
+};
 
 export const findLocalizationList = async (
 	filter: Pick<Localization, "namespace" | "key">[]

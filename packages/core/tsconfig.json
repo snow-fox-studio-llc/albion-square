@@ -8,5 +8,5 @@
 		"composite": true,
 		"rootDir": "./src/",
 		"outDir": "./dist/"
-	},
+	}
 }

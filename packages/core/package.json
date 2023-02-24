@@ -1,44 +1,44 @@
 {
-  "name": "@as/core",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc --build --watch"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "imports": {
-    "#internal/*": {
-      "default": "./dist/*.js",
-      "types": "./dist/*.d.ts"
-    },
-    "#types": {
-      "default": "./dist/types/index.js",
-      "types": "./dist/types/*.d.ts"
-    },
-    "#data": {
-      "default": "./dist/data/index.js",
-      "types": "./dist/data/*.d.ts"
-    },
-    "#services": {
-      "default": "./dist/services/index.js",
-      "types": "./dist/services/*.d.ts"
-    }
-  },
-  "exports": {
-    ".": {
-      "default": "./dist/index.js",
-      "types": "./dist/*.d.ts"
-    }
-  },
-  "type": "module",
-  "devDependencies": {
-    "@tsconfig/node18": "1.0.1",
-    "@types/node": "18.11.9",
-    "typescript": "4.8.4"
-  },
+	"name": "@as/core",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc --build --watch"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"imports": {
+		"#internal/*": {
+			"default": "./dist/*.js",
+			"types": "./dist/*.d.ts"
+		},
+		"#types": {
+			"default": "./dist/types/index.js",
+			"types": "./dist/types/*.d.ts"
+		},
+		"#data": {
+			"default": "./dist/data/index.js",
+			"types": "./dist/data/*.d.ts"
+		},
+		"#services": {
+			"default": "./dist/services/index.js",
+			"types": "./dist/services/*.d.ts"
+		}
+	},
+	"exports": {
+		".": {
+			"default": "./dist/index.js",
+			"types": "./dist/*.d.ts"
+		}
+	},
+	"type": "module",
+	"devDependencies": {
+		"@tsconfig/node18": "1.0.1",
+		"@types/node": "18.11.9",
+		"typescript": "4.8.4"
+	},
 	"dependencies": {
 		"aws-sdk": "2.1258.0",
 		"axios": "1.1.3",
