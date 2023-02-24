@@ -62,7 +62,9 @@ export const updateItems = async (
 		const shopSubCategory = rawItem["@shopsubcategory1"];
 		const tier = Number(rawItem["@tier"]);
 		const maxQuality = Number(rawItem["@maxqualitylevel"] || "1");
-		const localizationDocument = localizationMap.get(uniqueName) as LocalizationDocument;
+		const localizationDocument = localizationMap.get(
+			uniqueName
+		) as LocalizationDocument;
 
 		const enchantments = [];
 
@@ -98,8 +100,8 @@ export const updateItems = async (
 		};
 
 		try {
-			await validateItem(item)
-		} catch(err) {
+			await validateItem(item);
+		} catch (err) {
 			onError(`${uniqueName} invalid`);
 			continue;
 		}

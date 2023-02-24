@@ -1,12 +1,12 @@
 import { initData, closeData } from "#data";
 
 export const initServices = async () => {
-    await initData();
-}
+	await initData();
+};
 
 export const closeServices = async () => {
-    await closeData();
-}
+	await closeData();
+};
 
 export * from "#internal/services/game-version-service";
 export * from "#internal/services/item-service";
