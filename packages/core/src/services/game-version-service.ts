@@ -10,5 +10,3 @@ export const getGameVersionStatus = async (): Promise<GameVersionStatus> => {
 		latestVersion: remoteVersion,
 	};
 };
-
-export * from "#internal/data/game-version-data";

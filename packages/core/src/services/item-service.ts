@@ -120,5 +120,3 @@ export const updateItems = async (
 
 	onSuccess("Done");
 };
-
-export * from "#internal/data/item-data";

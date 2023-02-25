@@ -78,5 +78,3 @@ export const updateLocalization = async (
 
 	onSuccess("Done");
 };
-
-export * from "#internal/data/localization-data";
