@@ -1,4 +1,4 @@
-import { model, Schema, Error } from "mongoose";
+import { model, Schema } from "mongoose";
 import axios from "axios";
 import { Item, ItemDocument, DistinctItem, ResultPage } from "#types";
 import { localizationSchema } from "#data";
