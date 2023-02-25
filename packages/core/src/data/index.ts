@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+export * from "#internal/data/game-version-data";
+export * from "#internal/data/localization-data";
+export * from "#internal/data/item-data";
+
 export const initData = async () => {
 	await mongoose.connect(
 		process.env.MONGODB_URL || "mongodb://localhost:27017/albion_square"
@@ -9,7 +13,3 @@ export const initData = async () => {
 export const closeData = async () => {
 	await mongoose.disconnect();
 };
-
-export * from "#internal/data/game-version-data";
-export * from "#internal/data/localization-data";
-export * from "#internal/data/item-data";
