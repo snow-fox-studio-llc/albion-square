@@ -3,10 +3,12 @@ import axios from "axios";
 import {
 	Item,
 	DistinctItem,
+} from "#internal/types/item";
+import {
 	Localization,
 	LocalizationDocument,
 	LocalizationNamespace,
-} from "#types";
+} from "#internal/types/localization";
 
 export const localizationSchema = new Schema<LocalizationDocument>({
 	namespace: {

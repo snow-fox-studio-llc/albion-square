@@ -1,5 +1,5 @@
-import { fetchLatestVersion, findLatestVersion } from "#data";
-import { GameVersionStatus } from "#types";
+import { fetchLatestVersion, findLatestVersion } from "#internal/data/game-version-data";
+import { GameVersionStatus } from "#internal/types/game-version";
 
 export const getGameVersionStatus = async (): Promise<GameVersionStatus> => {
 	const localVersion = await findLatestVersion();

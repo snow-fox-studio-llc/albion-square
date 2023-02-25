@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose";
 import axios from "axios";
-import { GameVersion, GameVersionDocument } from "#types";
+import { GameVersion, GameVersionDocument } from "#internal/types/game-version";
 
 const gameVersionSchema = new Schema<GameVersionDocument>(
 	{

@@ -3,8 +3,8 @@ import {
 	fetchLocalization,
 	upsertLocalizationList,
 	validateLocalization,
-} from "#data";
-import { Localization } from "#types";
+} from "#internal/data/localization-data";
+import { Localization } from "#internal/types/localization";
 
 const LANG_CODE_DICTIONARY: any = Object.freeze({
 	"DE-DE": "de-DE",
