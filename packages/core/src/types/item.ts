@@ -1,4 +1,4 @@
-import { LocalizationDocument } from "#types";
+import { LocalizationDocument } from "#internal/types/localization";
 
 export interface Item {
 	uniqueName: string;

@@ -13,18 +13,6 @@
 		"#internal/*": {
 			"default": "./dist/*.js",
 			"types": "./dist/*.d.ts"
-		},
-		"#types": {
-			"default": "./dist/types/index.js",
-			"types": "./dist/types/*.d.ts"
-		},
-		"#data": {
-			"default": "./dist/data/index.js",
-			"types": "./dist/data/*.d.ts"
-		},
-		"#services": {
-			"default": "./dist/services/index.js",
-			"types": "./dist/services/*.d.ts"
 		}
 	},
 	"exports": {

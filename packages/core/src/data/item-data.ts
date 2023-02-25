@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
 import axios from "axios";
-import { Item, ItemDocument, DistinctItem, ResultPage } from "#types";
-import { localizationSchema } from "#data";
+import { Item, ItemDocument, DistinctItem } from "#internal/types/item";
+import { ResultPage } from "#internal/types/result-page";
+import { localizationSchema } from "#internal/data/localization-data";
 
 const itemSchema = new Schema<ItemDocument>({
 	uniqueName: {

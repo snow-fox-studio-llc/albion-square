@@ -1,4 +1,4 @@
-import { initData, closeData } from "#data";
+import { initData, closeData } from "#internal/data/index";
 
 export const initServices = async () => {
 	await initData();

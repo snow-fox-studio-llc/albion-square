@@ -2,10 +2,11 @@ import {
 	fetchItems,
 	validateItem,
 	upsertItems,
-	findLocalizationList,
 	deleteItemGhosts,
-} from "#data";
-import { Item, LocalizationDocument, LocalizationNamespace } from "#types";
+} from "#internal/data/item-data";
+import { findLocalizationList } from "#internal/data/localization-data";
+import { Item } from "#internal/types/item";
+import { LocalizationDocument, LocalizationNamespace } from "#internal/types/localization";
 
 const extractRawObjects = async (
 	rawJson: any,
