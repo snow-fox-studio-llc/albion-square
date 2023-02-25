@@ -1,9 +1,6 @@
 import { Schema, model } from "mongoose";
 import axios from "axios";
-import {
-	Item,
-	DistinctItem,
-} from "#internal/types/item";
+import { Item, DistinctItem } from "#internal/types/item";
 import {
 	Localization,
 	LocalizationDocument,

@@ -1,9 +1,9 @@
 import winston, { transports, format } from "winston";
-import { initServices, closeServices } from "@as/core";
+import { initCore, shutdownCore } from "@as/core";
 import * as app from "#internal/app";
 
 const initCommanderApp = async () => {
-	await initServices();
+	await initCore();
 
 	winston.configure({
 		transports: [
@@ -23,7 +23,7 @@ const initCommanderApp = async () => {
 };
 
 const closeCommanderApp = async () => {
-	await closeServices();
+	await shutdownCore();
 };
 
 const main = async () => {
