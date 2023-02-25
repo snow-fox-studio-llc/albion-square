@@ -6,7 +6,10 @@ import {
 } from "#internal/data/item-data";
 import { findLocalizationList } from "#internal/data/localization-data";
 import { Item } from "#internal/types/item";
-import { LocalizationDocument, LocalizationNamespace } from "#internal/types/localization";
+import {
+	LocalizationDocument,
+	LocalizationNamespace,
+} from "#internal/types/localization";
 
 const extractRawObjects = async (
 	rawJson: any,
