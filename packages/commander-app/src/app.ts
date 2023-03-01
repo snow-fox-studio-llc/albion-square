@@ -1,10 +1,12 @@
 import { Command } from "commander";
-import winston from "winston";
 import {
 	getGameVersionStatus,
 	updateLocalization,
 	updateItems,
+	LoggerUtility,
 } from "@as/core";
+
+const logger = new LoggerUtility("commander-app");
 
 export const run = async () => {
 	const program = new Command();
@@ -16,7 +18,7 @@ export const run = async () => {
 		.description("Compares local and remote game versions")
 		.action(async () => {
 			const gameVersionStatus = await getGameVersionStatus();
-			winston.info(JSON.stringify(gameVersionStatus));
+			logger.info(JSON.stringify(gameVersionStatus));
 		});
 
 	program
@@ -27,23 +29,14 @@ export const run = async () => {
 		.action(async () => {
 			const gameVersionStatus = await getGameVersionStatus();
 
-			winston.info(JSON.stringify(gameVersionStatus));
+			logger.info(JSON.stringify(gameVersionStatus));
 
 			if (gameVersionStatus.upToDate) {
 				return;
 			}
 
-			await updateLocalization(
-				gameVersionStatus.latestVersion,
-				winston.info,
-				winston.error
-			);
-
-			await updateItems(
-				gameVersionStatus.latestVersion,
-				winston.info,
-				winston.error
-			);
+			await updateLocalization(gameVersionStatus.latestVersion);
+			await updateItems(gameVersionStatus.latestVersion);
 		});
 
 	await program.parseAsync(process.argv);

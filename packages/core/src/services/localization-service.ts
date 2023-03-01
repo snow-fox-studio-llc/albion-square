@@ -5,6 +5,7 @@ import {
 	validateLocalization,
 } from "#internal/data/localization-data";
 import { Localization } from "#internal/types/localization";
+import { LoggerUtility } from "#internal/utilities/logger-utility";
 
 const LANG_CODE_DICTIONARY: any = Object.freeze({
 	"DE-DE": "de-DE",
@@ -22,18 +23,16 @@ const LANG_CODE_DICTIONARY: any = Object.freeze({
 	"ZH-TW": "zh-TW",
 });
 
-export const updateLocalization = async (
-	version: string,
-	onSuccess: (message: string) => void,
-	onError: (message: string) => void
-) => {
+const logger = new LoggerUtility("localization-service");
+
+export const updateLocalization = async (version: string) => {
 	const rawLocalizationJson = await fetchLocalization(version);
 
 	const localizationList: Localization[] = [];
 
 	for (const rawLocalization of rawLocalizationJson.tmx.body.tu) {
 		if (!rawLocalization["@tuid"] || !rawLocalization.tuv) {
-			onError(JSON.stringify(rawLocalization));
+			logger.error(JSON.stringify(rawLocalization));
 			continue;
 		}
 
@@ -61,20 +60,20 @@ export const updateLocalization = async (
 		try {
 			await validateLocalization(localization);
 		} catch (err) {
-			onError(`${localization.key} invalid`);
+			logger.error(`${localization.key} invalid`);
 			continue;
 		}
 
 		localizationList.push(localization);
 
-		onSuccess(`${localization.key} done`);
+		logger.info(`${localization.key} done`);
 	}
 
-	onSuccess("Updating localization");
+	logger.info("Updating localization");
 
 	await upsertLocalizationList(localizationList);
 
 	await deleteLocalizationGhosts(version);
 
-	onSuccess("Done");
+	logger.info("Done");
 };
