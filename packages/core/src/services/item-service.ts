@@ -6,10 +6,13 @@ import {
 } from "#internal/data/item-data";
 import { findLocalizationList } from "#internal/data/localization-data";
 import { Item } from "#internal/types/item";
+import { LoggerUtility } from "#internal/utilities/logger-utility";
 import {
 	LocalizationDocument,
 	LocalizationNamespace,
 } from "#internal/types/localization";
+
+const logger = new LoggerUtility("item-service");
 
 const extractRawObjects = async (
 	rawJson: any,
@@ -33,11 +36,7 @@ const extractRawObjects = async (
 	return rawObjects;
 };
 
-export const updateItems = async (
-	version: string,
-	onSuccess: (message: string) => void,
-	onError: (message: string) => void
-): Promise<void> => {
+export const updateItems = async (version: string): Promise<void> => {
 	const rawItemsJson = await fetchItems(version);
 
 	const rawItems = await extractRawObjects(rawItemsJson, "@uniquename");
@@ -106,20 +105,20 @@ export const updateItems = async (
 		try {
 			await validateItem(item);
 		} catch (err) {
-			onError(`${uniqueName} invalid`);
+			logger.error(`${uniqueName} invalid`);
 			continue;
 		}
 
 		items.push(item);
 
-		onSuccess(`${uniqueName} done`);
+		logger.info(`${uniqueName} done`);
 	}
 
-	onSuccess("Updating items");
+	logger.info("Updating items");
 
 	await upsertItems(items);
 
 	await deleteItemGhosts(version);
 
-	onSuccess("Done");
+	logger.info("Done");
 };

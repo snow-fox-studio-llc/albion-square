@@ -15,7 +15,7 @@ export class LoggerUtility {
 							({ level, message, label, timestamp }) =>
 								`${timestamp} [${label}] ${level}: ${message.substring(
 									0,
-									Math.min(32, message.length)
+									Math.min(64, message.length)
 								)}`
 						)
 					),
