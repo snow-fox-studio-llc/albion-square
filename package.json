@@ -20,8 +20,8 @@
 	},
 	"homepage": "https://github.com/snow-fox-studio-llc/albion-square#readme",
 	"devDependencies": {
-		"lerna": "^6.0.3",
-		"prettier": "^2.7.1"
+		"lerna": "6.0.3",
+		"prettier": "2.7.1"
 	},
 	"workspaces": [
 		"packages/*"
