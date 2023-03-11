@@ -1,3 +1,4 @@
+import { singleton } from "tsyringe";
 import { Schema, model } from "mongoose";
 import axios from "axios";
 import { Item, DistinctItem } from "#internal/types/item";
@@ -7,169 +8,180 @@ import {
 	LocalizationNamespace,
 } from "#internal/types/localization";
 
-export const localizationSchema = new Schema<LocalizationDocument>({
-	namespace: {
-		type: String,
-		enum: [
-			LocalizationNamespace.ALBION_ONLINE,
-			LocalizationNamespace.ALBION_SQUARE,
-		],
-		required: true,
-	},
-	key: {
-		type: String,
-		required: true,
-	},
-	"de-DE": String,
-	"en-US": {
-		type: String,
-		required: true,
-	},
-	"es-ES": String,
-	"fr-FR": String,
-	"id-ID": String,
-	"it-IT": String,
-	"ja-JP": String,
-	"ko-KR": String,
-	"pl-PL": String,
-	"pt-BR": String,
-	"ru-RU": String,
-	"zh-CN": String,
-	"zh-TW": String,
-	version: {
-		type: String,
-		required: true,
-	},
-});
+@singleton()
+export class LocalizationData {
+	public readonly localizationSchema;
+	private readonly localizationModel;
 
-localizationSchema.index({ namespace: 1, key: 1 }, { unique: true });
+	constructor() {
+		this.localizationSchema = new Schema<LocalizationDocument>({
+			namespace: {
+				type: String,
+				enum: [
+					LocalizationNamespace.ALBION_ONLINE,
+					LocalizationNamespace.ALBION_SQUARE,
+				],
+				required: true,
+			},
+			key: {
+				type: String,
+				required: true,
+			},
+			"de-DE": String,
+			"en-US": {
+				type: String,
+				required: true,
+			},
+			"es-ES": String,
+			"fr-FR": String,
+			"id-ID": String,
+			"it-IT": String,
+			"ja-JP": String,
+			"ko-KR": String,
+			"pl-PL": String,
+			"pt-BR": String,
+			"ru-RU": String,
+			"zh-CN": String,
+			"zh-TW": String,
+			version: {
+				type: String,
+				required: true,
+			},
+		});
+		this.localizationSchema.index({ namespace: 1, key: 1 }, { unique: true });
+		this.localizationModel = model<LocalizationDocument>(
+			"Localization",
+			this.localizationSchema
+		);
+	}
 
-export const LocalizationModel = model<LocalizationDocument>(
-	"Localization",
-	localizationSchema
-);
+	async upsertLocalization(localization: Localization): Promise<void> {
+		const filter = {
+			namespace: localization.namespace,
+			key: localization.key,
+		};
 
-export const upsertLocalization = async (
-	localization: Localization
-): Promise<void> => {
-	const filter = {
-		namespace: localization.namespace,
-		key: localization.key,
-	};
+		await this.localizationModel
+			.replaceOne(filter, localization, {
+				upsert: true,
+			})
+			.lean()
+			.exec();
+	}
 
-	await LocalizationModel.replaceOne(filter, localization, {
-		upsert: true,
-	})
-		.lean()
-		.exec();
-};
-
-export const upsertLocalizationList = async (
-	localizationList: Localization[]
-): Promise<void> => {
-	await LocalizationModel.bulkWrite(
-		localizationList.map((localization: Localization) => {
-			return {
-				replaceOne: {
-					filter: {
-						namespace: localization.namespace,
-						key: localization.key,
+	async upsertLocalizationList(
+		localizationList: Localization[]
+	): Promise<void> {
+		await this.localizationModel.bulkWrite(
+			localizationList.map((localization: Localization) => {
+				return {
+					replaceOne: {
+						filter: {
+							namespace: localization.namespace,
+							key: localization.key,
+						},
+						replacement: localization,
+						upsert: true,
 					},
-					replacement: localization,
-					upsert: true,
+				};
+			})
+		);
+	}
+
+	async validateLocalization(localization: Localization): Promise<void> {
+		await this.localizationModel.validate(localization);
+	}
+
+	async findLocalizationList(
+		filter: Pick<Localization, "namespace" | "key">[]
+	): Promise<LocalizationDocument[]> {
+		return await this.localizationModel.find({ $or: filter }).lean().exec();
+	}
+
+	async findLocalizationByItemUniqueName(
+		uniqueName: Item["uniqueName"]
+	): Promise<LocalizationDocument | null> {
+		return await this.localizationModel
+			.findOne({
+				namespace: LocalizationNamespace.ALBION_ONLINE,
+				key: `@ITEMS_${uniqueName}`,
+			})
+			.lean()
+			.exec();
+	}
+
+	async findLocalizationListByItemUniqueName(
+		uniqueNames: Item["uniqueName"][]
+	): Promise<Localization[]> {
+		return await this.localizationModel
+			.find({
+				namespace: LocalizationNamespace.ALBION_ONLINE,
+				key: {
+					$in: uniqueNames.map((uniqueName) => `@ITEMS_${uniqueName}`),
 				},
-			};
-		})
-	);
-};
+			})
+			.lean()
+			.exec();
+	}
 
-export const validateLocalization = async (
-	localization: Localization
-): Promise<void> => {
-	await LocalizationModel.validate(localization);
-};
+	async findLocalizationByShopCategoryId(
+		id: string
+	): Promise<LocalizationDocument | null> {
+		return await this.localizationModel
+			.findOne({
+				key: `@MARKETPLACEGUI_ROLLOUT_SHOPCATEGORY_${id.toUpperCase()}`,
+			})
+			.lean()
+			.exec();
+	}
 
-export const findLocalizationList = async (
-	filter: Pick<Localization, "namespace" | "key">[]
-): Promise<LocalizationDocument[]> => {
-	return await LocalizationModel.find({ $or: filter }).lean().exec();
-};
+	async findLocalizationByShopSubCategoryId(
+		id: string
+	): Promise<LocalizationDocument | null> {
+		return await this.localizationModel
+			.findOne({
+				key: `@MARKETPLACEGUI_ROLLOUT_SHOPSUBCATEGORY_${id.toUpperCase()}`,
+			})
+			.lean()
+			.exec();
+	}
 
-export const findLocalizationByItemUniqueName = async (
-	uniqueName: Item["uniqueName"]
-): Promise<LocalizationDocument | null> => {
-	return await LocalizationModel.findOne({
-		namespace: LocalizationNamespace.ALBION_ONLINE,
-		key: `@ITEMS_${uniqueName}`,
-	})
-		.lean()
-		.exec();
-};
+	async findLocalizationByItemQuality(
+		quality: DistinctItem["quality"]
+	): Promise<LocalizationDocument | null> {
+		return await this.localizationModel
+			.findOne({
+				key: `@ITEMDETAILS_STATS_QUALITY_${quality}`,
+			})
+			.lean()
+			.exec();
+	}
 
-export const findLocalizationListByItemUniqueName = async (
-	uniqueNames: Item["uniqueName"][]
-): Promise<Localization[]> => {
-	return await LocalizationModel.find({
-		namespace: LocalizationNamespace.ALBION_ONLINE,
-		key: {
-			$in: uniqueNames.map((uniqueName) => `@ITEMS_${uniqueName}`),
-		},
-	})
-		.lean()
-		.exec();
-};
+	async findAllMarketplaceRolloutLocalization(): Promise<
+		LocalizationDocument[]
+	> {
+		return await this.localizationModel
+			.find({
+				key: { $regex: /@MARKETPLACEGUI_ROLLOUT_DEFAULT/gm },
+			})
+			.lean()
+			.exec();
+	}
 
-export const findLocalizationByShopCategoryId = async (
-	id: string
-): Promise<LocalizationDocument | null> => {
-	return await LocalizationModel.findOne({
-		key: `@MARKETPLACEGUI_ROLLOUT_SHOPCATEGORY_${id.toUpperCase()}`,
-	})
-		.lean()
-		.exec();
-};
+	async deleteLocalizationGhosts(
+		currentVersion: Localization["version"]
+	): Promise<void> {
+		await this.localizationModel.deleteMany({
+			version: { $ne: currentVersion },
+		});
+	}
 
-export const findLocalizationByShopSubCategoryId = async (
-	id: string
-): Promise<LocalizationDocument | null> => {
-	return await LocalizationModel.findOne({
-		key: `@MARKETPLACEGUI_ROLLOUT_SHOPSUBCATEGORY_${id.toUpperCase()}`,
-	})
-		.lean()
-		.exec();
-};
-
-export const findLocalizationByItemQuality = async (
-	quality: DistinctItem["quality"]
-): Promise<LocalizationDocument | null> => {
-	return await LocalizationModel.findOne({
-		key: `@ITEMDETAILS_STATS_QUALITY_${quality}`,
-	})
-		.lean()
-		.exec();
-};
-
-export const findAllMarketplaceRolloutLocalization = async (): Promise<
-	LocalizationDocument[]
-> => {
-	return await LocalizationModel.find({
-		key: { $regex: /@MARKETPLACEGUI_ROLLOUT_DEFAULT/gm },
-	})
-		.lean()
-		.exec();
-};
-
-export const deleteLocalizationGhosts = async (
-	currentVersion: Localization["version"]
-): Promise<void> => {
-	await LocalizationModel.deleteMany({ version: { $ne: currentVersion } });
-};
-
-export const fetchLocalization = async (commit: string): Promise<any> => {
-	return (
-		await axios.get(
-			`https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/${commit}/localization.json`,
-			{ responseType: "json" }
-		)
-	).data;
-};
+	async fetchLocalization(commit: string): Promise<any> {
+		return (
+			await axios.get(
+				`https://raw.githubusercontent.com/broderickhyman/ao-bin-dumps/${commit}/localization.json`,
+				{ responseType: "json" }
+			)
+		).data;
+	}
+}
