@@ -12,6 +12,8 @@
 	"dependencies": {
 		"@as/core": "workspace:*",
 		"commander": "9.4.1",
+		"reflect-metadata": "0.1.13",
+		"tsyringe": "4.7.0",
 		"winston": "3.8.2"
 	},
 	"devDependencies": {

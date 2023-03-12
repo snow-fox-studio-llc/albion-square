@@ -1,14 +1,19 @@
+import { container } from "tsyringe";
 import { Command } from "commander";
 import {
-	getGameVersionStatus,
-	updateLocalization,
-	updateItems,
+	GameVersionService,
+	LocalizationService,
+	ItemService,
 	LoggerUtility,
 } from "@as/core";
 
-const logger = new LoggerUtility("commander-app");
-
 export const run = async () => {
+	const logger = new LoggerUtility("commander-app");
+
+	const gameVersionService = container.resolve(GameVersionService);
+	const localizationService = container.resolve(LocalizationService);
+	const itemService = container.resolve(ItemService);
+
 	const program = new Command();
 
 	program.version("1.0");
@@ -17,7 +22,7 @@ export const run = async () => {
 		.command("get-game-version-status")
 		.description("Compares local and remote game versions")
 		.action(async () => {
-			const gameVersionStatus = await getGameVersionStatus();
+			const gameVersionStatus = await gameVersionService.getGameVersionStatus();
 			logger.info(JSON.stringify(gameVersionStatus));
 		});
 
@@ -27,7 +32,7 @@ export const run = async () => {
 			"Compares local and remote game versions. Runs all update services if necessary"
 		)
 		.action(async () => {
-			const gameVersionStatus = await getGameVersionStatus();
+			const gameVersionStatus = await gameVersionService.getGameVersionStatus();
 
 			logger.info(JSON.stringify(gameVersionStatus));
 
@@ -35,8 +40,8 @@ export const run = async () => {
 				return;
 			}
 
-			await updateLocalization(gameVersionStatus.latestVersion);
-			await updateItems(gameVersionStatus.latestVersion);
+			await localizationService.updateLocalization(gameVersionStatus.latestVersion);
+			await itemService.updateItems(gameVersionStatus.latestVersion);
 		});
 
 	await program.parseAsync(process.argv);

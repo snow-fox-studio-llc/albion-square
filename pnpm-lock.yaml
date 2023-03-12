@@ -16,11 +16,15 @@ importers:
       '@tsconfig/node18': 1.0.1
       '@types/node': 18.11.9
       commander: 9.4.1
+      reflect-metadata: 0.1.13
+      tsyringe: 4.7.0
       typescript: 4.8.4
       winston: 3.8.2
     dependencies:
       '@as/core': link:../core
       commander: 9.4.1
+      reflect-metadata: 0.1.13
+      tsyringe: 4.7.0
       winston: 3.8.2
     devDependencies:
       '@tsconfig/node18': 1.0.1
@@ -6280,6 +6284,10 @@ packages:
       indent-string: 4.0.0
       strip-indent: 3.0.0
     dev: true
+
+  /reflect-metadata/0.1.13:
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+    dev: false
 
   /regenerator-runtime/0.13.11:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
