@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
 import { LoggerUtility } from "#internal/utilities/logger-utility";
 
-const logger = new LoggerUtility("mongoose-loader");
-
 export const initMongoose = async () => {
+	const logger = new LoggerUtility("mongoose-loader");
 	logger.info("Initializing mongoose");
 
 	await mongoose.connect(
@@ -12,6 +11,7 @@ export const initMongoose = async () => {
 };
 
 export const shutdownMongoose = async () => {
+	const logger = new LoggerUtility("mongoose-loader");
 	logger.info("Disconnecting mongoose");
 
 	await mongoose.disconnect();

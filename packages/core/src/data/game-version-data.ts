@@ -1,41 +1,49 @@
+import { singleton } from "tsyringe";
 import { model, Schema } from "mongoose";
 import axios from "axios";
 import { GameVersion, GameVersionDocument } from "#internal/types/game-version";
 
-const gameVersionSchema = new Schema<GameVersionDocument>(
-	{
-		version: {
-			type: String,
-			required: true,
-		},
-	},
-	{ timestamps: true }
-);
+@singleton()
+export class GameVersionData {
+	private readonly gameVersionSchema;
+	private readonly gameVersionModel;
 
-const GameVersionModel = model<GameVersionDocument>(
-	"GameVersion",
-	gameVersionSchema
-);
+	constructor() {
+		this.gameVersionSchema = new Schema<GameVersionDocument>(
+			{
+				version: {
+					type: String,
+					required: true,
+				},
+			},
+			{ timestamps: true }
+		);
 
-export const createGameVersion = async (
-	version: GameVersion["version"]
-): Promise<void> => {
-	await GameVersionModel.create({ version });
-};
+		this.gameVersionModel = model<GameVersionDocument>(
+			"GameVersion",
+			this.gameVersionSchema
+		);
+	}
 
-export const findLatestVersion = async (): Promise<string | null> => {
-	const gameVersionDocument = await GameVersionModel.findOne()
-		.sort({ created_at: -1 })
-		.lean()
-		.exec();
-	return gameVersionDocument ? gameVersionDocument.version : null;
-};
+	async createGameVersion(version: GameVersion["version"]): Promise<void> {
+		await this.gameVersionModel.create({ version });
+	}
 
-export const fetchLatestVersion = async (): Promise<string> => {
-	return (
-		await axios.get(
-			"https://api.github.com/repos/broderickhyman/ao-bin-dumps/commits/master",
-			{ responseType: "json" }
-		)
-	).data.sha;
-};
+	async findLatestVersion(): Promise<string | null> {
+		const gameVersionDocument = await this.gameVersionModel
+			.findOne()
+			.sort({ created_at: -1 })
+			.lean()
+			.exec();
+		return gameVersionDocument ? gameVersionDocument.version : null;
+	}
+
+	async fetchLatestVersion(): Promise<string> {
+		return (
+			await axios.get(
+				"https://api.github.com/repos/broderickhyman/ao-bin-dumps/commits/master",
+				{ responseType: "json" }
+			)
+		).data.sha;
+	}
+}
