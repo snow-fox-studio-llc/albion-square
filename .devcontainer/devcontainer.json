@@ -5,8 +5,7 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-18-bookworm",
 	"mounts": [
-		"source=alpine-3-node-18-pnpm-8,target=${containerWorkspaceFolder}/.pnpm-store,type=volume",
-		"source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+		"source=alpine-3-node-18-pnpm-8,target=${containerWorkspaceFolder}/.pnpm-store,type=volume"
 	],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -16,7 +15,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo chown node .pnpm-store && sudo chown node node_modules"
+	"postCreateCommand": "sudo chown node .pnpm-store"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
