@@ -20,7 +20,7 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
-			"extensions": ["GitHub.vscode-pull-request-github", "esbenp.prettier-vscode"]
+			"extensions": ["GitHub.vscode-pull-request-github", "esbenp.prettier-vscode", "bradlc.vscode-tailwindcss"]
 		}
 	}
 
