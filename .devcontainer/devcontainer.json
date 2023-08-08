@@ -15,7 +15,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo chown node .pnpm-store",
+	"postCreateCommand": "sudo chown -R node:node .pnpm-store",
 
 	// Configure tool-specific properties.
 	"customizations": {
