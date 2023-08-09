@@ -6,5 +6,5 @@ USER node
 COPY --chown=node:node . .
 RUN pnpm install
 RUN pnpm --filter @as/next-app build
-EXPOSE 3000
+EXPOSE 5000
 CMD ["pnpm", "--filter", "@as/next-app", "start"]
