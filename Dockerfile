@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:lts
 RUN npm install -g pnpm
 RUN mkdir -p /home/node/albion-square && chown -R node:node /home/node/albion-square
 WORKDIR /home/node/albion-square
