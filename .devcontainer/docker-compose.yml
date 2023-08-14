@@ -35,6 +35,12 @@ services:
 
   localstack:
     image: localstack/localstack:latest
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=dev
+      - AWS_SECRET_ACCESS_KEY=dev
+      - AWS_SECRET_ACCESS_KEY=localstack
+      - HOSTNAME_EXTERNAL=localstack
     ports:
       - 4566:4566
       - 4510-4559:4510-4559
