@@ -2,10 +2,9 @@ version: '3.8'
 
 services:
   app:
-    image: mcr.microsoft.com/devcontainers/javascript-node:1-18-bookworm
+    image: mcr.microsoft.com/devcontainers/javascript-node:0-18
     volumes:
       - ../..:/workspaces:cached
-      # - debian-bookworm-node-18-pnpm:/workspaces/:cached
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -20,7 +19,8 @@ services:
     image: mongo:latest
     restart: unless-stopped
     volumes:
-      - mongodb-data:/data/db
+      - mongodb-db:/data/db
+      - mongodb-configdb:/data/configdb
 
     # Uncomment to change startup options
     # environment:
@@ -32,7 +32,5 @@ services:
     # (Adding the "ports" property to this file will not forward from a Codespace.)
 
 volumes:
-  mongodb-data:
-  # debian-bookworm-node-18-pnpm:
-  #   external: true
-  #   name: debian-bookworm-node-18-pnpm
+  mongodb-db:
+  mongodb-configdb:
