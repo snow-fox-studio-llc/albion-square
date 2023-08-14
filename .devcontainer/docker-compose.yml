@@ -40,6 +40,7 @@ services:
       - AWS_ACCESS_KEY_ID=dev
       - AWS_SECRET_ACCESS_KEY=dev
       - HOSTNAME=localhost
+      - USE_SSL=false
     ports:
       - 4566:4566
       - 4510-4559:4510-4559
