@@ -10,7 +10,7 @@ export class GameVersionService {
 	async getGameVersionStatus(): Promise<GameVersionStatus> {
 		const localVersion = await this.gameVersionData.findLatestVersion();
 		const remoteVersion = await this.gameVersionData.fetchLatestVersion();
-	
+
 		return {
 			upToDate: localVersion === remoteVersion,
 			latestVersion: remoteVersion,

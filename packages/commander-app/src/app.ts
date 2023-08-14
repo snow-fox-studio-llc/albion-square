@@ -40,7 +40,9 @@ export const run = async () => {
 				return;
 			}
 
-			await localizationService.updateLocalization(gameVersionStatus.latestVersion);
+			await localizationService.updateLocalization(
+				gameVersionStatus.latestVersion
+			);
 			await itemService.updateItems(gameVersionStatus.latestVersion);
 		});
 

@@ -5,7 +5,7 @@ WORKDIR /home/node/albion-square
 USER node
 COPY --chown=node:node . .
 ENV NODE_ENV=production
-RUN pnpm install
+RUN pnpm install --prod
 RUN pnpm --filter @as/next-app build
 EXPOSE 5000
 CMD ["pnpm", "--filter", "@as/next-app", "start"]
