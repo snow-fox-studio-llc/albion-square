@@ -6,7 +6,8 @@
 	"scripts": {
 		"prettier": "prettier --write \"**/*.{js,ts,css,scss,html,jsx,tsx,json,yaml}\"",
 		"clean": "find . ! -name '.pnpm-store' -name 'node_modules' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+",
-		"clean-ts": "find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+"
+		"clean-ts": "find packages -name 'dist' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'tsconfig.tsbuildinfo' -type f -exec rm '{}' \\+",
+		"start": "pm2 start --attach ecosystem.config.js"
 	},
 	"repository": {
 		"type": "git",
@@ -25,5 +26,8 @@
 	},
 	"workspaces": [
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"pm2": "5.3.0"
+	}
 }
