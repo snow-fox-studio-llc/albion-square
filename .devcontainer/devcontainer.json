@@ -18,7 +18,8 @@
 				"GitHub.vscode-pull-request-github",
 				"esbenp.prettier-vscode",
 				"bradlc.vscode-tailwindcss",
-				"prisma.prisma"
+				"prisma.prisma",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	},
