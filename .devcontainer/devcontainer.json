@@ -15,17 +15,16 @@
 		"vscode": {
 			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
-				"mongodb.mongodb-vscode",
 				"GitHub.vscode-pull-request-github",
 				"esbenp.prettier-vscode",
 				"bradlc.vscode-tailwindcss",
-				"ms-azuretools.vscode-docker"
+				"prisma.prisma"
 			]
 		}
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [5000, 27017, 4566]
+	"forwardPorts": [3000, 8080, 26257, 4566]
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "yarn install",
