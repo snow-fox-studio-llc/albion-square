@@ -21,7 +21,6 @@
 	},
 	"homepage": "https://github.com/snow-fox-studio-llc/albion-square#readme",
 	"devDependencies": {
-		"lerna": "7.1.4",
 		"prettier": "3.0.1"
 	},
 	"workspaces": [
