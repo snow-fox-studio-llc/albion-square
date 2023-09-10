@@ -3,23 +3,21 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc --build --watch"
+		"watch": "tsc --build --watch",
+		"build": "tsc --build"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
 		"@as/core": "workspace:*",
-		"commander": "11.0.0",
-		"reflect-metadata": "0.1.13",
-		"tsyringe": "4.8.0",
-		"winston": "3.10.0"
-	},
-	"devDependencies": {
-		"@tsconfig/node18": "18.2.0",
-		"@types/node": "20.4.8",
-		"typescript": "5.1.6"
+		"@tsconfig/node18": "^18.2.1",
+		"@types/node": "^20.6.0",
+		"commander": "^11.0.0",
+		"reflect-metadata": "^0.1.13",
+		"tsyringe": "^4.8.0",
+		"typescript": "^5.2.2",
+		"winston": "^3.10.0"
 	},
 	"imports": {
 		"#internal/*": {
