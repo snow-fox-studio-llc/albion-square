@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  userCharacters UserCharacter[]
+}
+
+model UserCharacter {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [id])
+  name String
+  guildId String? @db.Uuid
+  guild Guild? @relation(fields: [guildId], references: [id])
+}
+
+model Guild {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  name String
+  userCharacters UserCharacter[]
+}

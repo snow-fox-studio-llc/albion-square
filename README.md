@@ -11,5 +11,6 @@ Albion Online companion app
 
 ```bash
 pnpm install
+pnpm exec prisma migrate deploy
 
 ```
