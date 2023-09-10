@@ -27,8 +27,8 @@
 		"packages/*"
 	],
 	"dependencies": {
-		"@prisma/client": "5.2.0",
-		"pm2": "5.3.0",
-		"prisma": "5.2.0"
+		"@prisma/client": "^5.2.0",
+		"pm2": "^5.3.0",
+		"prisma": "^5.2.0"
 	}
 }

@@ -23,19 +23,17 @@
 		}
 	},
 	"type": "module",
-	"devDependencies": {
-		"@tsconfig/node18": "18.2.0",
-		"@types/node": "20.4.8",
-		"typescript": "5.1.6"
-	},
 	"dependencies": {
-		"@prisma/client": "5.2.0",
-		"aws-sdk": "2.1431.0",
-		"axios": "1.4.0",
-		"mongoose": "7.4.2",
-		"reflect-metadata": "0.1.13",
-		"sharp": "0.32.4",
-		"tsyringe": "4.8.0",
-		"winston": "3.10.0"
+		"@prisma/client": "^5.2.0",
+		"@tsconfig/node18": "^18.2.1",
+		"@types/node": "^20.6.0",
+		"aws-sdk": "^2.1454.0",
+		"axios": "^1.5.0",
+		"mongoose": "^7.5.0",
+		"reflect-metadata": "^0.1.13",
+		"sharp": "^0.32.5",
+		"tsyringe": "^4.8.0",
+		"typescript": "^5.2.2",
+		"winston": "^3.10.0"
 	}
 }
