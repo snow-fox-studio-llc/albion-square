@@ -10,7 +10,7 @@ Albion Online companion app
 0. Once inside the project, run:
 
 ```bash
-pnpm install --frozen-lockfile
+pnpm install
 pnpm exec prisma migrate deploy
 
 ```
