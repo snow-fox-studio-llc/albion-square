@@ -6,11 +6,12 @@ Albion Online companion app
 * VSCode with Dev Containers extesion
 
 ## Get Started
-0. Clone the repo by using the Dev Containers extension: "Clone repository in Named Container Volume"
-0. Once inside the project, run:
+1. Clone the repo by using the Dev Containers extension: "Clone repository in Named Container Volume"
+2. Place .env file at repository root
+3. Once inside the project, run:
 
 ```bash
 pnpm install
 pnpm exec prisma migrate deploy
-
+pnpm run --filter @as/next-app dev
 ```
