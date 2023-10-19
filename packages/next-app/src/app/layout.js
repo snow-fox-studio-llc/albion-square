@@ -11,7 +11,6 @@ export default function RootLayout({ children }) {
 		<html lang="en" className="dark:bg-gray-900">
 			<body>
 				{children}
-				<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
 			</body>
 		</html>
 	);
