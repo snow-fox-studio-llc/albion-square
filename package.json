@@ -1,11 +1,14 @@
 {
 	"name": "albion-square",
+	"description": "Albion Online companion app",
 	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"engines": {
+		"node": ">=20",
+		"pnpm": ">=8"
+	},
 	"scripts": {
 		"prettier": "prettier --write \"**/*.{js,ts,css,scss,html,jsx,tsx,json,yaml}\"",
-		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' \\+ && find packages -name 'out' -type d -prune -exec rm -rf '{}' \\+ && find packages -name '.next' -type d -prune -exec rm -rf '{}' \\+",
+		"clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' \\+",
 		"start": "pm2 start --no-daemon ecosystem.config.js"
 	},
 	"repository": {
@@ -13,17 +16,16 @@
 		"url": "git+https://github.com/snow-fox-studio-llc/albion-square.git"
 	},
 	"keywords": [],
-	"author": "",
+	"author": "luis815",
 	"license": "GNU AGPLv3",
 	"bugs": {
 		"url": "https://github.com/snow-fox-studio-llc/albion-square/issues"
 	},
 	"homepage": "https://github.com/snow-fox-studio-llc/albion-square#readme",
 	"devDependencies": {
-		"@prisma/client": "^5.2.0",
-		"prettier": "3.0.1",
-		"prisma": "^5.2.0"
-
+		"@prisma/client": "^5.6.0",
+		"prettier": "3.1.0",
+		"prisma": "^5.6.0"
 	},
 	"workspaces": [
 		"packages/*"

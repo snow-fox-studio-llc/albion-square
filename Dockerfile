@@ -6,6 +6,5 @@ USER node
 COPY --chown=node:node . .
 ENV NODE_ENV=production
 RUN pnpm install --prod --frozen-lockfile
-RUN pnpm --filter @as/next-app build
-EXPOSE 5000
-CMD ["pnpm", "run", "start"]
+RUN pnpm run -r build
+CMD ["sleep", "infinity"]
