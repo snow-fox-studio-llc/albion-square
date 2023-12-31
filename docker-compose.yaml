@@ -3,21 +3,11 @@ services:
     image: postgres:16
     restart: unless-stopped
     environment:
+      - POSTGRES_USER=dev
       - POSTGRES_PASSWORD=dev
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  localstack:
-    image: localstack/localstack:3
-    restart: unless-stopped
-    environment:
-      - AWS_DEFAULT_REGION=us-east-1
-      - AWS_ACCESS_KEY_ID=dev
-      - AWS_SECRET_ACCESS_KEY=dev
-      - HOSTNAME=localhost
-      - USE_SSL=false
-    volumes:
-      - "localstack-data:/var/lib/localstack"
-    ports:
-      - "4566:4566"
 volumes:
-  localstack-data:
+  postgresql-data:
