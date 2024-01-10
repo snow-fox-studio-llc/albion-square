@@ -1,5 +1,5 @@
 <script>
-	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from "flowbite-svelte";
+	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button } from "flowbite-svelte";
 </script>
 
 <Navbar>
@@ -10,12 +10,13 @@
 			alt="Flowbite Logo"
 		/>
 	</NavBrand>
-	<NavHamburger />
+	<div class="flex md:order-2">
+		<Button size="sm" href="/app">Get started</Button>
+		<NavHamburger />
+	  </div>
 	<NavUl>
 		<NavLi href="/">Home</NavLi>
 		<NavLi href="/about">About</NavLi>
-		<NavLi href="/docs/components/navbar">Navbar</NavLi>
-		<NavLi href="/pricing">Pricing</NavLi>
 		<NavLi href="/contact">Contact</NavLi>
 	</NavUl>
 </Navbar>

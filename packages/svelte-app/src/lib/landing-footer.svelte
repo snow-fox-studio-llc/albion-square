@@ -5,10 +5,9 @@
 <Footer footerType="logo">
 	<div class="sm:flex sm:items-center sm:justify-between">
 		<FooterBrand
-			href="https://flowbite.com"
-			src="/images/flowbite-svelte-icon-logo.svg"
+			href="/"
+			src="/albionsquare-dm.svg"
 			alt="Flowbite Logo"
-			name="Flowbite"
 		/>
 		<FooterLinkGroup
 			ulClass="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 dark:text-gray-400"
