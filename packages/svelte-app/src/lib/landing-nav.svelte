@@ -11,7 +11,7 @@
 		/>
 	</NavBrand>
 	<div class="flex md:order-2">
-		<Button size="sm" href="/app">Get started</Button>
+		<Button size="sm" href="/auth">Get started</Button>
 		<NavHamburger />
 	  </div>
 	<NavUl>
