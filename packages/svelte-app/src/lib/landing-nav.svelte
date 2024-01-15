@@ -4,7 +4,7 @@
 
 <Navbar>
 	<NavBrand href="/">
-		<picture class="me-3 h-6 sm:h-9 flex">
+		<picture class="flex h-10">
 			<source srcset="/albionsquare-dm.svg" media="(prefers-color-scheme: dark)" />
 			<img src="/albionsquare.svg" alt="Albion Square" />
 		</picture>
