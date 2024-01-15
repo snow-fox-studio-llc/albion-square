@@ -6,6 +6,7 @@
 	<div class="sm:flex sm:items-center sm:justify-between">
 		<FooterBrand
 			href="/"
+			name=""
 			src="/albionsquare-dm.svg"
 			alt="Flowbite Logo"
 		/>
