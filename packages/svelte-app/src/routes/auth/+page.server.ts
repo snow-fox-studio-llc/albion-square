@@ -5,6 +5,6 @@ export const load: PageServerLoad = async (event) => {
 	const { session } = await event.parent();
 
 	if (session !== null) {
-		throw redirect(301, "/app");
+		redirect(301, "/app");
 	}
 };

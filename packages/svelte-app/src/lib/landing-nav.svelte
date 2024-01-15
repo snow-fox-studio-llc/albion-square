@@ -4,7 +4,11 @@
 
 <Navbar>
 	<NavBrand href="/">
-		<img src="/albionsquare-dm.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
+		<picture class="me-3 h-6 sm:h-9 flex">
+			<source srcset="/albionsquare-dm.svg" media="(prefers-color-scheme: dark)" />
+			<img src="/albionsquare.svg" alt="Albion Square" />
+		</picture>
+		<!-- <img src="/albionsquare.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" /> -->
 	</NavBrand>
 	<div class="flex md:order-2">
 		<Button size="sm" href="/auth">Get started</Button>
