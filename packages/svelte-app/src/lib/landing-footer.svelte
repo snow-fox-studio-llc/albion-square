@@ -1,15 +1,16 @@
 <script>
-    import { Footer, FooterCopyright, FooterLinkGroup, FooterBrand, FooterLink } from 'flowbite-svelte';
+	import {
+		Footer,
+		FooterCopyright,
+		FooterLinkGroup,
+		FooterBrand,
+		FooterLink,
+	} from "flowbite-svelte";
 </script>
 
 <Footer footerType="logo">
 	<div class="sm:flex sm:items-center sm:justify-between">
-		<FooterBrand
-			href="/"
-			name=""
-			src="/albionsquare-dm.svg"
-			alt="Flowbite Logo"
-		/>
+		<FooterBrand href="/" name="" src="/albionsquare-dm.svg" alt="Flowbite Logo" />
 		<FooterLinkGroup
 			ulClass="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 dark:text-gray-400"
 		>

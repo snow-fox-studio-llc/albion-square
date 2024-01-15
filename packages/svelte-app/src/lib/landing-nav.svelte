@@ -4,16 +4,12 @@
 
 <Navbar>
 	<NavBrand href="/">
-		<img
-			src="/albionsquare-dm.svg"
-			class="me-3 h-6 sm:h-9"
-			alt="Flowbite Logo"
-		/>
+		<img src="/albionsquare-dm.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" />
 	</NavBrand>
 	<div class="flex md:order-2">
 		<Button size="sm" href="/auth">Get started</Button>
 		<NavHamburger />
-	  </div>
+	</div>
 	<NavUl>
 		<NavLi href="/">Home</NavLi>
 		<NavLi href="/about">About</NavLi>
