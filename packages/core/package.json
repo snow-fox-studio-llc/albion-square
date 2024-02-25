@@ -1,0 +1,35 @@
+{
+  "name": "@as/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsc --build --watch",
+    "build": "tsc --build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.1",
+    "tsyringe": "^4.8.0",
+    "winston": "^3.11.0"
+  },
+  "type": "module",
+  "imports": {
+    "#internal/*": {
+      "default": "./dist/*.js",
+      "types": "./dist/*.d.ts"
+    }
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/*.d.ts"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"extends": "@tsconfig/node20/tsconfig.json",
+	"compilerOptions": {
+		"declaration": true,
+		"sourceMap": true,
+		"composite": true,
+		"rootDir": "./src/",
+		"outDir": "./dist/",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	}
+}
