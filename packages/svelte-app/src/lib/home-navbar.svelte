@@ -23,7 +23,7 @@
 				<li><a href="/">Feedback</a></li>
 			</ul>
 		</div>
-		<a class="btn btn-ghost text-xl" href="/">Albion Square</a>
+		<a class="btn btn-ghost text-xl" href="/"><img alt="Albion Square" class="h-full w-auto" src="/albionsquare-icon.svg"/>Albion Square</a>
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal px-1">
