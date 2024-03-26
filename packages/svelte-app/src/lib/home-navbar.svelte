@@ -17,10 +17,10 @@
 				>
 			</div>
 			<ul
-				class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+				class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-[80vw]"
 			>
-				<li><a href="/">Features</a></li>
-				<li><a href="/">Feedback</a></li>
+				<li><a class="text-lg py-4" href="/">Features</a></li>
+				<li><a class="text-lg py-4" href="/">Feedback</a></li>
 			</ul>
 		</div>
 		<a class="btn btn-ghost text-xl" href="/"><img alt="Albion Square" class="h-full w-auto" src="/albionsquare-icon.svg"/>Albion Square</a>
