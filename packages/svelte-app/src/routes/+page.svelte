@@ -5,7 +5,7 @@
 <HomeNavbar />
 
 <div
-	class="hero min-h-screen"
+	class="hero min-h-[80vh]"
 	style="background-image: url(/albion-online-art-1.png);"
 >
 	<div class="hero-overlay bg-opacity-60"></div>

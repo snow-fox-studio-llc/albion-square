@@ -1,6 +1,8 @@
 <div class="navbar bg-base-100">
 	<div class="flex-1">
-		<a class="btn btn-ghost text-xl" href="/">Albion Square</a>
+		<a class="btn btn-ghost text-xl" href="/"
+			><img alt="Albion Square" class="h-full w-auto" src="/albionsquare-icon.svg" />Albion Square</a
+		>
 	</div>
 	<div class="flex-none gap-2">
 		<div class="form-control">
@@ -15,9 +17,7 @@
 					/>
 				</div>
 			</div>
-			<ul
-				class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-			>
+			<ul class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
 				<li>
 					<a class="justify-between" href="/">
 						Profile
